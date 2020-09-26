@@ -3,7 +3,6 @@ import './App.css';
 import Movie from "./components/Movie.component"
 import {API_KEY} from "./constns"
 
-// console.log(API_KEY)
 function App() {
   const setBubble=({left,top,width,height})=>{
     bubbleRef.current.style.setProperty("left",`${left}px`)
@@ -18,15 +17,14 @@ function App() {
   const SEARCH_API=`https://api.themoviedb.org/3/search/${type}?&api_key=${API_KEY}&query=`
   // const MOVIE_API=`https://api.themoviedb.org/3/discover/${type}?sort_by=popularity.desc&api_key=${API_KEY}&page=1`
   const MOVIE_API=`https://api.themoviedb.org/3/trending/${type}/week?api_key=${API_KEY}&page=1`
-  console.log(MOVIE_API)
+
   useEffect(()=>{ 
     searchMovies(MOVIE_API)
 
   },[])
   let lis=document.querySelectorAll("li");
-  console.log(bubbleRef.current)
   if(bubbleRef.current && !bubbleRef.current.style.getPropertyValue("top")){
-    let cords=lis[0].getBoundingClientRect();
+    let cords=lis[1].getBoundingClientRect();
     let directions={
         left:cords.left,
         top:cords.top,
@@ -55,7 +53,6 @@ function App() {
   
   const onChange=(e)=>{
     setSearch(e.target.value);
-    console.log(search)
   }
 
 
@@ -73,7 +70,6 @@ const moveBubble=(e)=>{
 
 
   const handleOnLinkClick=(e)=>{
-    console.log(e.target.innerText.toLowerCase())
     setType(e.target.innerText.toLowerCase())
     moveBubble(e);
     searchMovies(MOVIE_API)
@@ -105,7 +101,6 @@ const moveBubble=(e)=>{
       movies.map(movie=>{
         return <Movie {...movie} key={movie.id}/>
       })}
-      {/* {console.log(movies)} */}
       </div>
     </div>
   );
