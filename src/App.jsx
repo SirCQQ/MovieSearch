@@ -5,6 +5,12 @@ import {API_KEY} from "./constns"
 
 // console.log(API_KEY)
 function App() {
+  const setBubble=({left,top,width,height})=>{
+    bubbleRef.current.style.setProperty("left",`${left}px`)
+    bubbleRef.current.style.setProperty("top",`${top}px`)
+    bubbleRef.current.style.setProperty("width",`${width}px`)
+    bubbleRef.current.style.setProperty("height",`${height}px`)
+  }
   const [type,setType]=useState("movie")
   const bubbleRef=React.useRef();
   const [movies,setMovie]=useState([])
@@ -12,13 +18,23 @@ function App() {
   const SEARCH_API=`https://api.themoviedb.org/3/search/${type}?&api_key=${API_KEY}&query=`
   // const MOVIE_API=`https://api.themoviedb.org/3/discover/${type}?sort_by=popularity.desc&api_key=${API_KEY}&page=1`
   const MOVIE_API=`https://api.themoviedb.org/3/trending/${type}/week?api_key=${API_KEY}&page=1`
-  
+  console.log(MOVIE_API)
   useEffect(()=>{ 
     searchMovies(MOVIE_API)
 
   },[])
-
-
+  let lis=document.querySelectorAll("li");
+  console.log(bubbleRef.current)
+  if(bubbleRef.current && !bubbleRef.current.style.getPropertyValue("top")){
+    let cords=lis[0].getBoundingClientRect();
+    let directions={
+        left:cords.left,
+        top:cords.top,
+        width:cords.width,
+        height:cords.height,
+    }
+    setBubble(directions);
+}
   const searchMovies=(API)=>{
     fetch(API)
     .then(resp=>resp.json())
@@ -55,12 +71,7 @@ const moveBubble=(e)=>{
 }
 
 
-const setBubble=({left,top,width,height})=>{
-  bubbleRef.current.style.setProperty("left",`${left}px`)
-  bubbleRef.current.style.setProperty("top",`${top}px`)
-  bubbleRef.current.style.setProperty("width",`${width}px`)
-  bubbleRef.current.style.setProperty("height",`${height}px`)
-}
+
   const handleOnLinkClick=(e)=>{
     console.log(e.target.innerText.toLowerCase())
     setType(e.target.innerText.toLowerCase())
